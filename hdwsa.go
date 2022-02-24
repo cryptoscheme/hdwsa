@@ -2,11 +2,20 @@ package hdwsa
 
 import (
 	"crypto/sha256"
-	"strings"
 	"github.com/Nik-U/pbc"
+	"strings"
 )
 
 var hashFunc = sha256.New()
+
+// domain separation tag
+const (
+	DSTForH0 = "hdwsa.h0"
+	DSTForH1 = "hdwsa.h1"
+	DSTForH2 = "hdwsa.h2"
+	DSTForH3 = "hdwsa.h3"
+	DSTForH4 = "hdwsa.h4"
+)
 
 func Setup(rbits, qbits uint32) *PublicParams {
 	params := pbc.GenerateA(rbits, qbits)
@@ -54,16 +63,16 @@ REPEAT2:
 
 func (pp *PublicParams) WalletKeyDelegate(idt []string, wpk WalletPublicKey, wsk WalletSecretKey) (WalletPublicKey, WalletSecretKey) {
 	// compute QID
-	Qid := pp.pairing.NewG1().SetFromStringHash(strings.Join(idt, ""), hashFunc) // QID
+	Qid := pp.pairing.NewG1().SetFromStringHash(DSTForH0+strings.Join(idt, ""), hashFunc) // QID
 
 	var alphaID, betaID *pbc.Element // Zp
 REPEAT1:
-	if alphaID = pp.pairing.NewZr().SetFromStringHash(Qid.String()+pp.pairing.NewG1().PowZn(Qid, wsk.alpha).String(), hashFunc); alphaID.Is0() {
+	if alphaID = pp.pairing.NewZr().SetFromStringHash(DSTForH1+Qid.String()+pp.pairing.NewG1().PowZn(Qid, wsk.alpha).String(), hashFunc); alphaID.Is0() {
 		goto REPEAT1
 	}
 
 REPEAT2:
-	if betaID = pp.pairing.NewZr().SetFromStringHash(Qid.String()+pp.pairing.NewG1().PowZn(Qid, wsk.beta).String(), hashFunc); betaID.Is0() {
+	if betaID = pp.pairing.NewZr().SetFromStringHash(DSTForH2+Qid.String()+pp.pairing.NewG1().PowZn(Qid, wsk.beta).String(), hashFunc); betaID.Is0() {
 		goto REPEAT2
 	}
 
@@ -91,13 +100,13 @@ func (pp *PublicParams) VerifyKeyDerive(idt []string, wpk *WalletPublicKey) *DVK
 
 	qid := pp.pairing.NewG1().PowZn(wpk.BID, r) // rBID
 
-	h3 := pp.pairing.NewG1().SetFromStringHash(wpk.BID.String()+Qr.String()+qid.String(), hashFunc)
+	h3 := pp.pairing.NewG1().SetFromStringHash(DSTForH3+wpk.BID.String()+Qr.String()+qid.String(), hashFunc)
 
 	return &DVK{Qr, pp.pairing.NewGT().Pair(h3, pp.pairing.NewG1().Neg(wpk.AID))}
 }
 
 func (pp *PublicParams) VerifyKeyCheck(dvk *DVK, ID []string, wpk WalletPublicKey, wsk WalletSecretKey) bool {
-	h3 := pp.pairing.NewG1().SetFromStringHash(wpk.BID.String()+dvk.Qr.String()+
+	h3 := pp.pairing.NewG1().SetFromStringHash(DSTForH3+wpk.BID.String()+dvk.Qr.String()+
 		pp.pairing.NewG1().PowZn(dvk.Qr, wsk.beta).String(), hashFunc)
 
 	pair := pp.pairing.NewGT().Pair(h3, pp.pairing.NewG1().Neg(wpk.AID))
@@ -108,7 +117,7 @@ func (pp *PublicParams) VerifyKeyCheck(dvk *DVK, ID []string, wpk WalletPublicKe
 func (pp *PublicParams) SignKeyDerive(dvk *DVK, idt []string, wpk WalletPublicKey, wsvk WalletSecretKey) *DSK {
 	Q1 := pp.pairing.NewG1().PowZn(dvk.Qr, wsvk.beta) // compute beta * Qr
 
-	h3 := pp.pairing.NewG1().SetFromStringHash(wpk.BID.String()+dvk.Qr.String()+Q1.String(), hashFunc) // compute H3(*, *, *)
+	h3 := pp.pairing.NewG1().SetFromStringHash(DSTForH3+wpk.BID.String()+dvk.Qr.String()+Q1.String(), hashFunc) // compute H3(*, *, *)
 	return &DSK{pp.pairing.NewG1().PowZn(h3, wsvk.alpha)}
 }
 
@@ -120,7 +129,7 @@ func (pp *PublicParams) Sign(m []byte, dvk *DVK, dsk *DSK) *signature {
 	xP := pp.pairing.NewG1().PowZn(pp.P, x)
 	X := pp.pairing.NewGT().Pair(pp.P, xP)
 
-	h := pp.pairing.NewZr().SetFromStringHash(dvk.Qr.String()+dvk.Qvk.String()+string(m)+X.String(), hashFunc)
+	h := pp.pairing.NewZr().SetFromStringHash(DSTForH4+dvk.Qr.String()+dvk.Qvk.String()+string(m)+X.String(), hashFunc)
 
 	// compute Qsigma
 	Qsigma := pp.pairing.NewG1().PowZn(dsk.dsk, h)
@@ -137,7 +146,7 @@ func (pp *PublicParams) Verify(m []byte, sigma *signature, dvk *DVK) bool {
 		// compute (Qvk)^h
 		rsh := pp.pairing.NewGT().Mul(lsh, pp.pairing.NewGT().PowZn(dvk.Qvk, sigma.h))
 
-		return sigma.h.Equals(pp.pairing.NewZr().SetFromStringHash(dvk.Qr.String()+dvk.Qvk.String()+string(m)+rsh.String(), hashFunc))
+		return sigma.h.Equals(pp.pairing.NewZr().SetFromStringHash(DSTForH4+dvk.Qr.String()+dvk.Qvk.String()+string(m)+rsh.String(), hashFunc))
 	}
 	return false
 }
