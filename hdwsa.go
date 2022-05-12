@@ -94,8 +94,11 @@ REPEAT2:
 }
 
 func (pp *PublicParams) VerifyKeyDerive(idt []string, wpk *WalletPublicKey) *DVK {
+REPEAT:
 	r := pp.pairing.NewZr().Rand() // pick a random r
-
+        if r.Is0() {
+		goto REPEAT
+	}
 	Qr := pp.pairing.NewG1().PowZn(pp.P, r) // Qr = rP
 
 	qid := pp.pairing.NewG1().PowZn(wpk.BID, r) // rBID
@@ -123,8 +126,11 @@ func (pp *PublicParams) SignKeyDerive(dvk *DVK, idt []string, wpk WalletPublicKe
 
 func (pp *PublicParams) Sign(m []byte, dvk *DVK, dsk *DSK) *signature {
 	// pick random x
+REPEAT:
 	x := pp.pairing.NewZr().Rand() // pick a random number x
-
+        if x.Is0() {
+		goto REPEAT
+	}
 	// compute X = e(P, P)^x
 	xP := pp.pairing.NewG1().PowZn(pp.P, x)
 	X := pp.pairing.NewGT().Pair(pp.P, xP)
