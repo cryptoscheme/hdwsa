@@ -37,13 +37,13 @@ func (pp *PublicParams) RootWalletKeyGen(ids []string) (WalletSecretKey, WalletP
 	}
 
 	var alpha, beta *pbc.Element // master secret key
-REPEAT1:
+REPEAT0:
 	if alpha = pp.pairing.NewZr().Rand(); alpha.Is0() {
-		goto REPEAT1
+		goto REPEAT0
 	}
-REPEAT2:
+REPEAT1:
 	if beta = pp.pairing.NewZr().Rand(); beta.Is0() {
-		goto REPEAT2
+		goto REPEAT1
 	}
 	AID := pp.pairing.NewG1().PowZn(pp.P, alpha)
 	BID := pp.pairing.NewG1().PowZn(pp.P, beta)
@@ -63,7 +63,11 @@ REPEAT2:
 
 func (pp *PublicParams) WalletKeyDelegate(idt []string, wpk WalletPublicKey, wsk WalletSecretKey) (WalletPublicKey, WalletSecretKey) {
 	// compute QID
+REPEAT0:
 	Qid := pp.pairing.NewG1().SetFromStringHash(DSTForH0+strings.Join(idt, ""), hashFunc) // QID
+	if Qid.Is0() {
+		goto REPEAT0
+	}
 
 	var alphaID, betaID *pbc.Element // Zp
 REPEAT1:
@@ -126,17 +130,19 @@ func (pp *PublicParams) SignKeyDerive(dvk *DVK, idt []string, wpk WalletPublicKe
 
 func (pp *PublicParams) Sign(m []byte, dvk *DVK, dsk *DSK) *signature {
 	// pick random x
-REPEAT:
+REPEAT0:
 	x := pp.pairing.NewZr().Rand() // pick a random number x
         if x.Is0() {
-		goto REPEAT
+		goto REPEAT0
 	}
 	// compute X = e(P, P)^x
 	xP := pp.pairing.NewG1().PowZn(pp.P, x)
 	X := pp.pairing.NewGT().Pair(pp.P, xP)
-
+REPEAT1:
 	h := pp.pairing.NewZr().SetFromStringHash(DSTForH4+dvk.Qr.String()+dvk.Qvk.String()+string(m)+X.String(), hashFunc)
-
+	if h.Is0() {
+		goto REPEAT1
+	}
 	// compute Qsigma
 	Qsigma := pp.pairing.NewG1().PowZn(dsk.dsk, h)
 	Qsigma.ThenAdd(xP)
