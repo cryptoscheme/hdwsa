@@ -87,12 +87,12 @@ func BenchmarkSchemeL0RootWalletKeyGen(b *testing.B) {
 	benchmarkRootWalletKenGen(b, pp)
 }
 
-func BenchmarkSchemeL0VerifyKeyDerive(b *testing.B) { benchmarkLevel0VerifyKeyDerive(b, pp) }
+#func BenchmarkSchemeL0VerifyKeyDerive(b *testing.B) { benchmarkLevel0VerifyKeyDerive(b, pp) }
 
-func BenchmarkSchemeL0VerifyKeyCheck(b *testing.B) { benchmarkLevel0VerifyKeyCheck(b, pp) }
-func BenchmarkSchemeL0SignKeyDerive(b *testing.B)  { benchmarkLevel0SignKeyDerive(b, pp) }
-func BenchmarkSchemeL0Sign(b *testing.B)           { benchmarkLevel0Sign(b, pp) }
-func BenchmarkSchemeL0Verify(b *testing.B)         { benchmarkLevel0Verify(b, pp) }
+#func BenchmarkSchemeL0VerifyKeyCheck(b *testing.B) { benchmarkLevel0VerifyKeyCheck(b, pp) }
+#func BenchmarkSchemeL0SignKeyDerive(b *testing.B)  { benchmarkLevel0SignKeyDerive(b, pp) }
+#func BenchmarkSchemeL0Sign(b *testing.B)           { benchmarkLevel0Sign(b, pp) }
+#func BenchmarkSchemeL0Verify(b *testing.B)         { benchmarkLevel0Verify(b, pp) }
 
 func BenchmarkSchemeL1WalletKeyDelegate(b *testing.B) { benchmarkLevel1WalletKeyDelegate(b, pp) }
 func BenchmarkSchemeL1VerifyKeyDerive(b *testing.B)   { benchmarkLevel1VerifyKeyDerive(b, pp) }
