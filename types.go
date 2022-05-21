@@ -14,8 +14,8 @@ type PublicParams struct {
 }
 
 type WalletSecretKey struct {
-	alpha           *pbc.Element //  Zp
-	beta            *pbc.Element //  Zp
+	alpha *pbc.Element //  Zp
+	beta  *pbc.Element //  Zp
 	WalletPublicKey
 }
 
