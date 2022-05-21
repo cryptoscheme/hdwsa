@@ -11,6 +11,29 @@ var (
 	rbits uint32 = 160
 )
 
+func BenchmarkG1(b *testing.B) {
+	x := pp.pairing.NewZr().Rand() // pick a random number x
+	// compute X = e(P, P)^x
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		xP := pp.pairing.NewG1().PowZn(pp.P, x)
+		pp.pairing.NewGT().Pair(pp.P, xP)
+	}
+}
+
+func BenchmarkG2(b *testing.B) {
+	x := pp.pairing.NewZr().Rand() // pick a random number x
+	// compute X = e(P, P)^x
+	b.ReportAllocs()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		PP := pp.pairing.NewGT().Pair(pp.P, pp.P)
+		pp.pairing.NewGT().PowZn(PP, x)
+		pp.pairing.NewG1().PowZn(pp.P, x)
+	}
+}
+
 var errmsg = errors.New("bad signature")
 
 // TestScheme is for testing the correctness of the scheme.
@@ -78,7 +101,6 @@ func BenchmarkSchemeL1VerifyKeyCheck(b *testing.B) { benchmarkLevel1VerifyKeyChe
 func BenchmarkSchemeL1SignKeyDerive(b *testing.B)  { benchmarkLevel1SignKeyDerive(b, pp) }
 func BenchmarkSchemeL1Sign(b *testing.B)           { benchmarkLevel1Sign(b, pp) }
 func BenchmarkSchemeL1Verify(b *testing.B)         { benchmarkLevel1Verify(b, pp) }
-
 
 func benchmarkLevel0VerifyKeyDerive(b *testing.B, pp *PublicParams) {
 	_, wpk0 := pp.RootWalletKeyGen(rootID)
