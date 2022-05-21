@@ -2,7 +2,7 @@
 
 # This is script for extracting experiment data, filtering desired data items and stating average time.
 echo "=================== Part 1 functional testing       ==================="
-go test -v -run TestScheme
+/usr/local/go/bin/go test -v -run TestScheme
 echo "=================== Part 1 functional testing done  ==================="
 
 echo "=================== Part 2 benchmark testing        ==================="
@@ -21,7 +21,7 @@ fi
 
 
 echo 'starting running benchmark'
-go test -bench=BenchmarkSchemeL*  -cpu=1 -count=1000 -timeout 3500m> $file
+/usr/local/go/bin/go test -bench=BenchmarkSchemeL*  -cpu=1 -count=1000 -timeout 3500m> $file
 echo "=================== Part 2 benchmark testing done   ==================="
 
 echo "=================== Part 3 extracting data          ==================="
