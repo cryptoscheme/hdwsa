@@ -42,8 +42,8 @@ do
   cat $filename | awk '{sum+=$2} END {print "#times = ", NR, ", Average = ", sum/NR, " ns"}'
 done
 
-echo BenchmarkSchemeL1Verify
-awk '$1 ~ /^'BenchmarkSchemeL1Verify'$/ {print $1,$3}' $file > ./$directory/BenchmarkSchemeL1Verify.txt
-cat ./datafile/BenchmarkSchemeL1Verify.txt | awk '{sum+=$2} END {print "#times = ", NR, "Sum = ",sum, "Average = ", sum/NR, " ns"}'
+#echo BenchmarkSchemeL1Verify
+#awk '$1 ~ /^'BenchmarkSchemeL1Verify'$/ {print $1,$3}' $file > ./$directory/BenchmarkSchemeL1Verify.txt
+#cat ./datafile/BenchmarkSchemeL1Verify.txt | awk '{sum+=$2} END {print "#times = ", NR, "Sum = ",sum, "Average = ", sum/NR, " ns"}'
 
 echo "=================== Part 3 extracting data done         ===============" 
