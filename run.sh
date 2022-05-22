@@ -21,5 +21,5 @@ fi
 
 
 echo 'starting running benchmark'
-/usr/local/go/bin/go test -bench=BenchmarkSchemeL*  -cpu=1 -count=1000 -timeout 3500m> $file
+nohup /usr/local/go/bin/go test -bench=BenchmarkSchemeL*  -cpu=1 -count=1000 -timeout 3500m> $file 2>&1 &
 echo "=================== Part 2 benchmark testing done   ==================="
