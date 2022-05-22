@@ -1,3 +1,5 @@
+#!/bin/bash
+
 file=benchmark.txt
 directory=datafile
 
