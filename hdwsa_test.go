@@ -95,12 +95,12 @@ func BenchmarkSchemeL0Sign(b *testing.B)           { benchmarkLevel0Sign(b, pp) 
 func BenchmarkSchemeL0Verify(b *testing.B)         { benchmarkLevel0Verify(b, pp) }
 
 func BenchmarkSchemeL1WalletKeyDelegate(b *testing.B) { benchmarkLevel1WalletKeyDelegate(b, pp) }
-func BenchmarkSchemeL1VerifyKeyDerive(b *testing.B)   { benchmarkLevel1VerifyKeyDerive(b, pp) }
+//func BenchmarkSchemeL1VerifyKeyDerive(b *testing.B)   { benchmarkLevel1VerifyKeyDerive(b, pp) }
 
-func BenchmarkSchemeL1VerifyKeyCheck(b *testing.B) { benchmarkLevel1VerifyKeyCheck(b, pp) }
-func BenchmarkSchemeL1SignKeyDerive(b *testing.B)  { benchmarkLevel1SignKeyDerive(b, pp) }
-func BenchmarkSchemeL1Sign(b *testing.B)           { benchmarkLevel1Sign(b, pp) }
-func BenchmarkSchemeL1Verify(b *testing.B)         { benchmarkLevel1Verify(b, pp) }
+//func BenchmarkSchemeL1VerifyKeyCheck(b *testing.B) { benchmarkLevel1VerifyKeyCheck(b, pp) }
+//func BenchmarkSchemeL1SignKeyDerive(b *testing.B)  { benchmarkLevel1SignKeyDerive(b, pp) }
+//func BenchmarkSchemeL1Sign(b *testing.B)           { benchmarkLevel1Sign(b, pp) }
+//func BenchmarkSchemeL1Verify(b *testing.B)         { benchmarkLevel1Verify(b, pp) }
 
 func benchmarkLevel0VerifyKeyDerive(b *testing.B, pp *PublicParams) {
 	_, wpk0 := pp.RootWalletKeyGen(rootID)
