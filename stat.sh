@@ -21,11 +21,11 @@ benchmarkFuncName[6]=BenchmarkSchemeL0Verify
 
 #level 1
 benchmarkFuncName[7]=BenchmarkSchemeL1WalletKeyDelegate
-benchmarkFuncName[8]=BenchmarkSchemeL1VerifyKeyDerive
-benchmarkFuncName[9]=BenchmarkSchemeL1VerifyKeyCheck
-benchmarkFuncName[10]=BenchmarkSchemeL1SignKeyDerive
-benchmarkFuncName[11]=BenchmarkSchemeL1Sign
-benchmarkFuncName[12]=BenchmarkSchemeL1Verify
+#benchmarkFuncName[8]=BenchmarkSchemeL1VerifyKeyDerive
+#benchmarkFuncName[9]=BenchmarkSchemeL1VerifyKeyCheck
+#benchmarkFuncName[10]=BenchmarkSchemeL1SignKeyDerive
+#benchmarkFuncName[11]=BenchmarkSchemeL1Sign
+#benchmarkFuncName[12]=BenchmarkSchemeL1Verify
 
 echo ${#benchmarkFuncName[@]}
 for((i=0;i<${#benchmarkFuncName[@]};i++));
