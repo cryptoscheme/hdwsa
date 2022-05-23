@@ -145,9 +145,6 @@ func (pp *PublicParams) VerifyKeyCheck(dvk *DVK, ID []string, wpk WalletPublicKe
 }
 
 func (pp *PublicParams) SignKeyDerive(dvk *DVK, idt []string, wpk WalletPublicKey, wsk WalletSecretKey) *DSK {
-	if !pp.VerifyKeyCheck(dvk,idt,wpk,wsk){
-		panic("check wrong")
-	}
 	Q1Ch := make(chan *pbc.Element, 1)
 	go func(){
 		Q1Ch <- pp.pairing.NewG1().PowZn(dvk.Qr, wsk.beta) // compute beta * Qr
