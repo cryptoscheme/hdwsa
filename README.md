@@ -18,7 +18,7 @@ To download, run stathdwsa.sh in hdwsa, follow the following steps:
 
 # Details of Test
 
-  We use a type A pairing on an elliptic curve y2 = x3 + x over Fq for 512-bit q and group with 160-bit prime order, 
+  We use a type A pairing on an elliptic curve y^2 = x^3 + x over Fq for 512-bit q and group with 160-bit prime order, 
   and sha-256 for hashing. 
    
 # Introduction of Source Files
