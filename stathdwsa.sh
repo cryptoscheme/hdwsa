@@ -21,7 +21,7 @@ fi
 
 
 echo 'starting running benchmark'
-/usr/local/go/bin/go test -bench=BenchmarkSchemeL*  -cpu=1 -count=100 -timeout 3500m> $file
+/usr/local/go/bin/go test -bench=BenchmarkSchemeL*  -cpu=1 -count=1000 -timeout 3500m> $file
 echo "=================== Part 2 benchmark testing done   ==================="
 
 echo "=================== Part 3 extracting data          ==================="
